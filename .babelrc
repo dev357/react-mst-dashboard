@@ -1,0 +1,16 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "modules": false,
+        "targets": {
+          "browsers": ["last 2 Chrome versions", "last 2 firefox versions", "last 2 edge versions"]
+        }
+      }
+    ],
+    "stage-0",
+    "react"
+  ],
+  "plugins": ["transform-decorators-legacy"]
+}
