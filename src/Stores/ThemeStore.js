@@ -1,15 +1,31 @@
-// eslint-disable no-param-reassign
+/* eslint-disable no-param-reassign */
 
-import { types } from 'mobx-state-tree';
+import { types, getSnapshot } from 'mobx-state-tree';
 
-const ThemeStore = types.model('ThemeStore', {
-  appBarHeight: '1rem',
-  paddingSmall: '1rem',
+const ThemeStore = types
+  .model('ThemeStore', {
+    appBarHeight: '3rem',
 
-  colorPrimary: 'cyan',
-  colorSecondary: 'magenta',
-  colorLight: 'lightgray',
-  colorDark: 'black',
-});
+    footerHeight: '6rem',
+
+    drawerWidth: '20rem',
+    drawerTransitionTime: '0.5s',
+
+    paddingSmall: '1rem',
+
+    colorPrimary: 'rgb(25, 118, 210);',
+    colorSecondary: 'magenta',
+    colorLight: 'rgb(240, 240, 240)',
+    colorMedium: 'rgb(200, 200, 200)',
+    colorDark: 'dimgray',
+    colorWhite: 'white',
+
+    textColorLight: 'white',
+  })
+  .views(self => ({
+    get theme() {
+      return getSnapshot(self);
+    },
+  }));
 
 export default ThemeStore;

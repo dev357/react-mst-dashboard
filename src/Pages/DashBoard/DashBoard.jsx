@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import MenuIcon from 'mdi-react/MenuIcon';
 import LockIcon from 'mdi-react/LockOutlineIcon';
 import LockOpenIcon from 'mdi-react/LockOpenOutlineIcon';
+import HeartIcon from 'mdi-react/HeartIcon';
 
 import AppBar from './Components/AppBar';
 import Footer from './Components/Footer';
@@ -16,19 +17,37 @@ import Drawer from './Components/Drawer';
 
 const ContentText = styled.p`
   font-size: 5em;
-  color: palevioletred;
+  color: ${({ theme }) => theme.colorDark};
 `;
 
 const DrawerHeader = styled.div`
   display: flex;
-  padding-right: 1rem;
+  padding-right: ${({ theme }) => theme.paddingSmall};
+  padding-left: ${({ theme }) => theme.paddingSmall};
   align-items: center;
-  justify-content: flex-end;
-  height: 40px;
+  justify-content: space-between;
+  height: ${({ theme }) => `calc(${theme.appBarHeight} - 1px)`};
+  transition: all 0.5s;
+  border-bottom: ${({ theme }) => `1px solid ${theme.colorMedium}`};
 
-  svg:hover {
-    fill: gray;
+  svg {
+    transition: transform 0.2s;
   }
+  svg:hover {
+    transform: scale(1.4, 1.4);
+  }
+`;
+
+const StyledMenuIcon = styled(MenuIcon)`
+  transition: transform 0.2s;
+
+  :hover {
+    transform: scale(1.4, 1.4);
+  }
+`;
+
+const Link = styled.a`
+  color: ${({ theme }) => theme.textColorLight};
 `;
 
 @observer
@@ -43,6 +62,9 @@ export default class DashBoard extends Component {
   toggleNavBarDocked = () => {
     this.props.store.view.toggleNavBarDocked();
   };
+  goTo = (route) => {
+    this.props.store.router.goTo(route);
+  };
 
   render() {
     const { navBarState: { open, docked } } = this.props.store.view;
@@ -50,24 +72,37 @@ export default class DashBoard extends Component {
       <div>
         <Wrapper docked={docked}>
           <AppBar gridarea="header">
-            <MenuIcon onClick={this.toggleNavBarOpen} />
+            <StyledMenuIcon onClick={this.toggleNavBarOpen} />
+            <p>route: {this.props.store.router.route}</p>
             <p>Log In</p>
           </AppBar>
 
           <Content gridarea="content">
-            <ContentText>LOREM IPSUM</ContentText>
+            <ContentText>{`Current route: ${this.props.store.router.route}`}</ContentText>
           </Content>
 
-          <Footer gridarea="footer" />
+          <Footer gridarea="footer">
+            <p>
+              {'Made with ♥ by '}
+              <Link href="https://github.com/dev357" target="_blank">
+                dev357
+              </Link>
+            </p>
+          </Footer>
         </Wrapper>
         <Drawer toggleNavBarOpen={this.toggleNavBarOpen} open={open} docked={docked}>
           <DrawerHeader>
+            <h3>{this.props.store.headingTest}</h3>
             {open && docked ? (
               <LockIcon onClick={this.toggleNavBarDocked} />
             ) : (
               <LockOpenIcon onClick={this.toggleNavBarDocked} />
             )}
           </DrawerHeader>
+          <br />
+          <button onClick={() => this.goTo('/foo')}>goto foo</button>
+          <button onClick={() => this.goTo('/bar')}>goto bar</button>
+          <button onClick={() => this.goTo('/')}>goto home</button>
         </Drawer>
       </div>
     );

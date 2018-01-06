@@ -1,4 +1,4 @@
-// eslint-disable no-param-reassign
+/* eslint-disable no-param-reassign */
 
 import { types } from 'mobx-state-tree';
 import { observe } from 'mobx';

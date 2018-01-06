@@ -1,24 +1,25 @@
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 
 const AppBar = styled.header`
-  grid-area: ${props => props.gridarea || 'header'};
-  background-color: ${({ theme }) => theme.colorSecondary};
+  grid-area: ${props => props.gridarea};
+  background-color: ${({ theme }) => theme.colorPrimary};
+  color: ${({ theme }) => theme.textColorLight};
+  fill: ${({ theme }) => theme.textColorLight};
   display: flex;
   padding-left: ${({ theme }) => theme.paddingSmall};
   padding-right: ${({ theme }) => theme.paddingSmall};
   align-items: center;
   justify-content: space-between;
-
-  svg:hover {
-    fill: gray;
-  }
 `;
 
 AppBar.defaultProps = {
   theme: {
-    colorSecondary: 'blue',
+    colorPrimary: 'blue',
+    textColorLight: 'white',
     paddingSmall: '1rem',
   },
+  gridarea: 'header',
 };
 
-export default AppBar;
+export default observer(AppBar);

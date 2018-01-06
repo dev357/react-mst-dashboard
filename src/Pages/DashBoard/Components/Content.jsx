@@ -2,9 +2,8 @@ import styled from 'styled-components';
 
 const Content = styled.main`
   grid-area: ${props => props.gridarea || 'content'};
-  height: 1500px;
-  background-color: yellow;
-  padding: 1.5rem;
+  background-color: ${({ theme }) => theme.colorWhite};
+  padding: ${({ theme }) => theme.paddingSmall};
 `;
 
 export default Content;

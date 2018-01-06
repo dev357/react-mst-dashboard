@@ -4,14 +4,15 @@ import { observer } from 'mobx-react';
 const Content = styled.div`
   display: grid;
   position: fixed;
-  left: ${({ docked }) => (docked ? '100px' : 0)};
+  left: ${({ docked, theme }) => (docked ? theme.drawerWidth : 0)};
   height: 100vh;
-  width: ${({ docked }) => (docked ? 'calc(100vw - 100px)' : '100vw')};
-  overflow-y: scroll;
-  background-color: lightgray;
-  transition: width 0.6s, left 0.6s;
+  width: ${({ docked, theme }) => (docked ? `calc(100vw - ${theme.drawerWidth})` : '100vw')};
+  overflow-y: auto;
+  background-color: ${({ theme }) => theme.colorLight};
+  transition: width ${({ theme }) => theme.drawerTransitionTime},
+    left ${({ theme }) => theme.drawerTransitionTime};
   grid-template-columns: auto;
-  grid-template-rows: 40px auto 40px;
+  grid-template-rows: ${({ theme }) => theme.appBarHeight} auto ${({ theme }) => theme.footerHeight};
   grid-template-areas:
     'header'
     'content'

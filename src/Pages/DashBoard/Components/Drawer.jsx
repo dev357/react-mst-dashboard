@@ -4,12 +4,13 @@ import styled from 'styled-components';
 
 const StyledDrawer = styled.nav`
   position: fixed;
-  left: ${({ open }) => (open ? 0 : '-100px')};
-  width: 100px;
+  left: ${({ open, theme }) => (open ? 0 : `-${theme.drawerWidth}`)};
+  width: ${({ theme }) => theme.drawerWidth};
   height: 100vh;
-  transition: left 0.6s;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 1);
-  background-color: blue;
+  transition: left ${({ theme }) => theme.drawerTransitionTime};
+  ${({ docked, open }) => !docked && open && 'box-shadow: 0 0 50px rgba(0, 0, 0, 1);'};
+  ${({ docked, open, theme }) => docked && open && `border-right: 1px solid ${theme.colorMedium}`};
+  background-color: ${({ theme }) => theme.colorLight};
 `;
 
 const Overlay = styled.div`
@@ -24,7 +25,9 @@ const Drawer = ({
 }) => (
   <div>
     {open && !docked && <Overlay onClick={toggleNavBarOpen} />}
-    <StyledDrawer open={open}>{children}</StyledDrawer>
+    <StyledDrawer open={open} docked={docked}>
+      {children}
+    </StyledDrawer>
   </div>
 );
 

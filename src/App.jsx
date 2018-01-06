@@ -1,11 +1,13 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
+import { observer } from 'mobx-react';
 
 import Store from './Stores';
 import modelOf from './lib/mstPropTypeHelper';
 import DashBoard from './Pages/DashBoard/DashBoard';
 
-export default class App extends PureComponent {
+@observer
+export default class App extends Component {
   static propTypes = {
     store: modelOf(Store).isRequired,
   };

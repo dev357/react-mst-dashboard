@@ -4,6 +4,10 @@ import { getSnapshot, destroy } from 'mobx-state-tree';
 import { injectGlobal } from 'styled-components';
 import App from './App';
 import Store from './Stores/index';
+import throttleEvent from './lib/optimizedResize';
+
+// create a throttled window.resize event, use "optimizedResize" for the event name
+throttleEvent('resize', 'optimizedResize');
 
 // eslint-disable-next-line no-unused-expressions
 injectGlobal`
@@ -35,29 +39,13 @@ if (module.hot) {
   module.hot.accept(['./App.jsx'], () => {
     renderApp(App, store);
   });
+
   module.hot.accept(['./Stores/index.js'], () => {
-    renderApp(App, createStore(getSnapshot(store)));
+    const newStore = { ...getSnapshot(store) };
+
+    // don't remember theme sate so you can test theme changes easier
+    newStore.theme = {};
+
+    renderApp(App, createStore(newStore));
   });
 }
-
-// Throttled resize event optimizedResize
-(function optimizedResize() {
-  const throttle = (type, name, obj = window) => {
-    // obj = obj || window;
-    let running = false;
-    const func = () => {
-      if (running) {
-        return;
-      }
-      running = true;
-      requestAnimationFrame(() => {
-        obj.dispatchEvent(new CustomEvent(name));
-        running = false;
-      });
-    };
-    obj.addEventListener(type, func);
-  };
-
-  /* init - you can init any event */
-  throttle('resize', 'optimizedResize');
-}());
