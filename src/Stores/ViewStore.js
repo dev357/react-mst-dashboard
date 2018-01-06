@@ -1,19 +1,21 @@
-import { types } from "mobx-state-tree";
-import { observe, autorun } from "mobx";
+// eslint-disable no-param-reassign
+
+import { types } from 'mobx-state-tree';
+import { observe } from 'mobx';
 
 const BREAKPOINTS = Object.freeze({
   XS: 0,
   SM: 1,
   MD: 2,
   LG: 3,
-  XL: 4
+  XL: 4,
 });
 
 const ViewStore = types
-  .model("ViewStore", {
+  .model('ViewStore', {
     width: window.innerWidth,
     navBarOpen: true,
-    navBarDocked: false
+    navBarDocked: false,
   })
   .views(self => ({
     get breakpoint() {
@@ -32,29 +34,36 @@ const ViewStore = types
 
       return {
         open,
-        docked
+        docked,
       };
-    }
+    },
   }))
   .actions(self => ({
     afterCreate() {
-      window.addEventListener("optimizedResize", self.setWidth);
+      window.addEventListener('optimizedResize', self.setWidth);
       // self.breakpointAutorun = autorun(() => {
       //   if (self.navBarDocked) {
       //     if (self.breakpoint <= BREAKPOINTS.XS) self.setNavBarOpen(false);
       //     if (self.breakpoint > BREAKPOINTS.XS && self.navBarDocked) self.setNavBarOpen(true);
       //   }
       // });
-      self.breakpointObserver = observe(self, "breakpoint", change => {
+      self.breakpointObserver = observe(self, 'breakpoint', (change) => {
         if (self.navBarDocked) {
-          if (!(change.oldValue <= BREAKPOINTS.XS) && change.newValue <= BREAKPOINTS.XS) self.setNavBarOpen(false);
-          if (!(change.oldValue > BREAKPOINTS.XS) && self.breakpoint > BREAKPOINTS.XS && self.navBarDocked)
+          if (!(change.oldValue <= BREAKPOINTS.XS) && change.newValue <= BREAKPOINTS.XS) {
+            self.setNavBarOpen(false);
+          }
+          if (
+            !(change.oldValue > BREAKPOINTS.XS) &&
+            self.breakpoint > BREAKPOINTS.XS &&
+            self.navBarDocked
+          ) {
             self.setNavBarOpen(true);
+          }
         }
       });
     },
     beforeDestroy() {
-      window.removeEventListener("optimizedResize", self.setWidth);
+      window.removeEventListener('optimizedResize', self.setWidth);
       self.breakpointObserver(); // dispose of the observer
     },
     setWidth() {
@@ -71,7 +80,7 @@ const ViewStore = types
     },
     setNavBarDocked(isDocked) {
       self.navBarDocked = isDocked;
-    }
+    },
   }));
 
 export default ViewStore;
