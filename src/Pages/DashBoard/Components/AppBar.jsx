@@ -2,10 +2,10 @@ import styled from 'styled-components';
 
 const AppBar = styled.header`
   grid-area: ${props => props.gridarea || 'header'};
-  background-color: magenta;
+  background-color: ${({ theme }) => theme.colorSecondary};
   display: flex;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: ${({ theme }) => theme.paddingSmall};
+  padding-right: ${({ theme }) => theme.paddingSmall};
   align-items: center;
   justify-content: space-between;
 
@@ -13,5 +13,12 @@ const AppBar = styled.header`
     fill: gray;
   }
 `;
+
+AppBar.defaultProps = {
+  theme: {
+    colorSecondary: 'blue',
+    paddingSmall: '1rem',
+  },
+};
 
 export default AppBar;
