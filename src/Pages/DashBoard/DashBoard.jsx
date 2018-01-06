@@ -4,15 +4,31 @@ import modelOf from 'lib/mstPropTypeHelper';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
 
+import MenuIcon from 'mdi-react/MenuIcon';
+import LockIcon from 'mdi-react/LockOutlineIcon';
+import LockOpenIcon from 'mdi-react/LockOpenOutlineIcon';
+
 import AppBar from './Components/AppBar';
 import Footer from './Components/Footer';
 import Content from './Components/Content';
 import Wrapper from './Components/Wrapper';
+import Drawer from './Components/Drawer';
 
 const ContentText = styled.p`
   font-size: 5em;
-  text-align: center;
   color: palevioletred;
+`;
+
+const DrawerHeader = styled.div`
+  display: flex;
+  padding-right: 1rem;
+  align-items: center;
+  justify-content: flex-end;
+  height: 40px;
+
+  svg:hover {
+    fill: gray;
+  }
 `;
 
 @observer
@@ -32,43 +48,27 @@ export default class DashBoard extends Component {
     const { navBarState: { open, docked } } = this.props.store.view;
     return (
       <div>
-        {open &&
-          !docked && (
-            <div
-              onClick={this.toggleNavBarOpen}
-              style={{
-                position: 'fixed',
-                backgroundColor: 'rgba(0,0,0,0.3)',
-                width: '100vw',
-                height: '100vh',
-                zIndex: 5000,
-              }}
-            />
-          )}
-        <nav
-          style={{
-            position: 'absolute',
-            left: open ? '0' : '-100px',
-            width: '100px',
-            height: '100vh',
-            transition: 'left .6s',
-            boxShadow: '0 0 5px rgba(0,0,0,1)',
-            backgroundColor: 'blue',
-            zIndex: 5001,
-          }}
-        >
-          <button onClick={this.toggleNavBarDocked}>{`dock(${docked})`}</button>
-        </nav>
         <Wrapper docked={docked}>
-          <AppBar gridarea="header" />
+          <AppBar gridarea="header">
+            <MenuIcon onClick={this.toggleNavBarOpen} />
+            <p>Log In</p>
+          </AppBar>
 
           <Content gridarea="content">
             <ContentText>LOREM IPSUM</ContentText>
-            <button onClick={this.toggleNavBarOpen}>{`open(${open})`}</button>
           </Content>
 
           <Footer gridarea="footer" />
         </Wrapper>
+        <Drawer toggleNavBarOpen={this.toggleNavBarOpen} open={open} docked={docked}>
+          <DrawerHeader>
+            {open && docked ? (
+              <LockIcon onClick={this.toggleNavBarDocked} />
+            ) : (
+              <LockOpenIcon onClick={this.toggleNavBarDocked} />
+            )}
+          </DrawerHeader>
+        </Drawer>
       </div>
     );
   }

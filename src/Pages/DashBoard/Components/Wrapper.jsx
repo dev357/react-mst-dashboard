@@ -3,20 +3,19 @@ import { observer } from 'mobx-react';
 
 const Content = styled.div`
   display: grid;
-  position: absolute;
-  right: 0;
+  position: fixed;
+  left: ${({ docked }) => (docked ? '100px' : 0)};
   height: 100vh;
-  width: ${props => (props.docked ? 'calc(100% - 100px)' : 'calc(100%)')}
-  width: open ? 'calc(100% - 100px)' : 'calc(100%)',
-  overflowY: scroll;
+  width: ${({ docked }) => (docked ? 'calc(100vw - 100px)' : '100vw')};
+  overflow-y: scroll;
   background-color: lightgray;
-  transition: width .6s;
+  transition: width 0.6s, left 0.6s;
   grid-template-columns: auto;
   grid-template-rows: 40px auto 40px;
   grid-template-areas:
-    "header"
-    "content"
-    "footer";
+    'header'
+    'content'
+    'footer';
 `;
 
 export default observer(Content);

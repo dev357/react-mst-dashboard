@@ -15,7 +15,7 @@ const ViewStore = types
   .model('ViewStore', {
     width: window.innerWidth,
     navBarOpen: true,
-    navBarDocked: false,
+    navBarDocked: true,
   })
   .views(self => ({
     get breakpoint() {
@@ -28,7 +28,7 @@ const ViewStore = types
     get navBarState() {
       const open = self.navBarOpen;
       let docked = self.navBarDocked;
-      if (self.breakpoint === BREAKPOINTS.XS) {
+      if (self.breakpoint <= BREAKPOINTS.XS || !open) {
         docked = false;
       }
 
