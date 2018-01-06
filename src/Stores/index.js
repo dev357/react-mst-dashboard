@@ -1,15 +1,15 @@
-import { types } from "mobx-state-tree";
-import ViewStore from "./ViewStore";
+import { types } from 'mobx-state-tree';
+import ViewStore from './ViewStore';
 
 const Store = types
-  .model("Store", {
+  .model('Store', {
     view: types.optional(ViewStore, {}),
-    heading: "react-mst-dashboard"
+    heading: 'react-mst-dashboard',
   })
   .views(self => ({
     get headingTest() {
-      return self.heading + "-testt";
-    }
+      return `${self.heading}-test`;
+    },
   }));
 
 export default Store;

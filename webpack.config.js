@@ -1,69 +1,81 @@
-const webpack = require("webpack");
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require('webpack');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const basePath = __dirname;
-const isDev = process.env.NODE_ENV !== "production";
-console.log("isDev:", isDev);
+const isDev = process.env.NODE_ENV !== 'production';
+console.log('isDev:', isDev);
 
 const config = {
-  devtool: isDev ? "cheap-module-eval-source-map" : "none",
-  mode: isDev ? "development" : "production",
-  context: path.join(basePath, "src"),
-  entry: { app: "./index.js" },
+  devtool: isDev ? 'cheap-module-eval-source-map' : 'none',
+  mode: isDev ? 'development' : 'production',
+  context: path.join(basePath, 'src'),
+  entry: { app: './index.jsx' },
+
+  resolve: {
+    extensions: ['.js', '.jsx', '.json'],
+    modules: [
+      'src', // so we can do import 'components/Link' instead of '../../../components/Link'
+      'node_modules',
+    ],
+  },
 
   output: {
-    path: path.join(basePath, "build"),
-    filename: "[name].js"
+    path: path.join(basePath, 'build'),
+    filename: '[name].js',
   },
 
   module: {
     rules: [
       {
-        test: /\.js$/,
-        include: path.resolve("src"),
-        loader: "babel-loader",
+        test: /\.jsx?$/,
+        include: path.resolve('src'),
+        loader: 'babel-loader',
         options: {
           presets: [
             [
-              "env",
+              'env',
               {
                 modules: false,
                 targets: {
-                  browsers: ["last 2 chrome versions", "last 2 firefox versions", "last 2 edge versions"]
-                }
-              }
+                  browsers: [
+                    'last 2 chrome versions',
+                    'last 2 firefox versions',
+                    'last 2 edge versions',
+                  ],
+                },
+              },
             ],
-            "stage-0",
-            "react"
+            'stage-0',
+            'react',
           ],
-          plugins: ["transform-decorators-legacy"]
-        }
-      }
-    ]
+          plugins: ['transform-decorators-legacy'],
+        },
+      },
+    ],
   },
 
   devServer: {
     port: 3000,
-    host: "0.0.0.0",
+    host: '0.0.0.0',
     overlay: true,
     hot: true,
-    //hotOnly: true,
+    // hotOnly: true,
     useLocalIp: true,
-    allowedHosts: ["risto.lakrito.local"],
+    allowedHosts: ['risto.lakrito.local'],
     stats: {
-      modules: false
-    }
+      modules: false,
+    },
   },
 
   plugins: [
     new HtmlWebpackPlugin({
-      filename: "index.html",
-      template: "index.html"
+      filename: 'index.html',
+      template: 'index.html',
     }),
     new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin()
-  ]
+    new webpack.HotModuleReplacementPlugin(),
+  ],
 };
 
 module.exports = config;

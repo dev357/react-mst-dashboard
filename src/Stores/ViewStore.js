@@ -1,36 +1,76 @@
 import { types } from "mobx-state-tree";
+import { observe, autorun } from "mobx";
+
+const BREAKPOINTS = Object.freeze({
+  XS: 0,
+  SM: 1,
+  MD: 2,
+  LG: 3,
+  XL: 4
+});
 
 const ViewStore = types
   .model("ViewStore", {
-    width: window.innerWidth
+    width: window.innerWidth,
+    navBarOpen: true,
+    navBarDocked: false
   })
   .views(self => ({
     get breakpoint() {
-      if (self.width < 600) return "xs";
-      if (self.width < 960) return "sm";
-      if (self.width < 1280) return "md";
-      if (self.width < 1920) return "lg";
-      return "xl";
+      if (self.width < 600) return BREAKPOINTS.XS;
+      if (self.width < 960) return BREAKPOINTS.SM;
+      if (self.width < 1280) return BREAKPOINTS.MD;
+      if (self.width < 1920) return BREAKPOINTS.LG;
+      return BREAKPOINTS.XL;
+    },
+    get navBarState() {
+      const open = self.navBarOpen;
+      let docked = self.navBarDocked;
+      if (self.breakpoint === BREAKPOINTS.XS) {
+        docked = false;
+      }
+
+      return {
+        open,
+        docked
+      };
     }
   }))
   .actions(self => ({
-    setWidth(width) {
-      self.width = width;
+    afterCreate() {
+      window.addEventListener("optimizedResize", self.setWidth);
+      // self.breakpointAutorun = autorun(() => {
+      //   if (self.navBarDocked) {
+      //     if (self.breakpoint <= BREAKPOINTS.XS) self.setNavBarOpen(false);
+      //     if (self.breakpoint > BREAKPOINTS.XS && self.navBarDocked) self.setNavBarOpen(true);
+      //   }
+      // });
+      self.breakpointObserver = observe(self, "breakpoint", change => {
+        if (self.navBarDocked) {
+          if (!(change.oldValue <= BREAKPOINTS.XS) && change.newValue <= BREAKPOINTS.XS) self.setNavBarOpen(false);
+          if (!(change.oldValue > BREAKPOINTS.XS) && self.breakpoint > BREAKPOINTS.XS && self.navBarDocked)
+            self.setNavBarOpen(true);
+        }
+      });
     },
-    addResizeEventListener() {
-      let resizeTimeout;
-      window.addEventListener("resize", self.test); //() => {
-      console.log("resize");
-      // if (!resizeTimeout) {
-      //   resizeTimeout = setTimeout(() => {
-      //     resizeTimeout = null;
-      //     self.setWidth(window.innerWidth);
-      //   }, 100);
-      // }
-      //});
+    beforeDestroy() {
+      window.removeEventListener("optimizedResize", self.setWidth);
+      self.breakpointObserver(); // dispose of the observer
     },
-    test() {
-      console.log("testt");
+    setWidth() {
+      self.width = window.innerWidth;
+    },
+    toggleNavBarOpen() {
+      self.setNavBarOpen(!self.navBarOpen);
+    },
+    setNavBarOpen(isOpen) {
+      self.navBarOpen = isOpen;
+    },
+    toggleNavBarDocked() {
+      self.setNavBarDocked(!self.navBarDocked);
+    },
+    setNavBarDocked(isDocked) {
+      self.navBarDocked = isDocked;
     }
   }));
 
