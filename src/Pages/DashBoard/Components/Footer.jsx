@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 
-const Footer = styled.footer.attrs({
-  gridarea: props => props.gridarea || 'footer',
-})`
-  grid-area: ${props => props.gridarea};
+const Footer = styled.footer`
+  grid-area: ${props => props.gridarea || 'footer'};
   background-color: magenta;
 `;
 

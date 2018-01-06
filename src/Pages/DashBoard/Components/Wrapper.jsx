@@ -1,12 +1,7 @@
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 
-const Content = styled.div.attrs({
-  docked: (props) => {
-    console.log(props);
-    return props.docked || false;
-  },
-})`
+const Content = styled.div`
   display: grid;
   position: absolute;
   right: 0;
