@@ -4,21 +4,16 @@ import modelOf from 'lib/mstPropTypeHelper';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
 
-import MenuIcon from 'mdi-react/MenuIcon';
 import LockIcon from 'mdi-react/LockOutlineIcon';
 import LockOpenIcon from 'mdi-react/LockOpenOutlineIcon';
-import HeartIcon from 'mdi-react/HeartIcon';
 
 import AppBar from './Components/AppBar';
 import Footer from './Components/Footer';
 import Content from './Components/Content';
 import Wrapper from './Components/Wrapper';
 import Drawer from './Components/Drawer';
-
-const ContentText = styled.p`
-  font-size: 5em;
-  color: ${({ theme }) => theme.colorDark};
-`;
+import TestPage from './Components/TestPage';
+import AppBarContent from './Components/AppBarContent';
 
 const DrawerHeader = styled.div`
   display: flex;
@@ -34,14 +29,6 @@ const DrawerHeader = styled.div`
     transition: transform 0.2s;
   }
   svg:hover {
-    transform: scale(1.4, 1.4);
-  }
-`;
-
-const StyledMenuIcon = styled(MenuIcon)`
-  transition: transform 0.2s;
-
-  :hover {
     transform: scale(1.4, 1.4);
   }
 `;
@@ -72,13 +59,14 @@ export default class DashBoard extends Component {
       <div>
         <Wrapper docked={docked}>
           <AppBar gridarea="header">
-            <StyledMenuIcon onClick={this.toggleNavBarOpen} />
-            <p>route: {this.props.store.router.route}</p>
-            <p>Log In</p>
+            <AppBarContent
+              toggleNavBarOpen={this.toggleNavBarOpen}
+              router={this.props.store.router}
+            />
           </AppBar>
 
           <Content gridarea="content">
-            <ContentText>{`Current route: ${this.props.store.router.route}`}</ContentText>
+            <TestPage />
           </Content>
 
           <Footer gridarea="footer">

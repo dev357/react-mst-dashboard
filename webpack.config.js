@@ -61,6 +61,7 @@ const config = {
     overlay: true,
     hot: true,
     // hotOnly: true,
+    historyApiFallback: true,
     useLocalIp: true,
     allowedHosts: ['risto.lakrito.local'],
     stats: {

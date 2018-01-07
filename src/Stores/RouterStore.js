@@ -14,13 +14,15 @@ const RouterStore = types
   }))
   .actions(self => ({
     afterCreate() {
+      const url = document.location.pathname;
       window.history.replaceState(
         {
-          url: document.location.pathname,
+          url,
         },
         document.title,
         document.location.href,
       );
+      self.changeRoute(url);
 
       window.addEventListener('popstate', self.popStateListener);
     },
