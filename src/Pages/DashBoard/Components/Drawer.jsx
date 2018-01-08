@@ -11,6 +11,7 @@ const StyledDrawer = styled.nav`
   ${({ docked, open }) => !docked && open && 'box-shadow: 0 0 50px rgba(0, 0, 0, 1);'};
   ${({ docked, open, theme }) => docked && open && `border-right: 1px solid ${theme.colorMedium}`};
   background-color: ${({ theme }) => theme.colorLight};
+  overflow-y: auto;
 `;
 
 const Overlay = styled.div`

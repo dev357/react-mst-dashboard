@@ -1,15 +1,23 @@
 /* eslint-disable no-param-reassign */
 
 import { types } from 'mobx-state-tree';
+import { ACCESSGROUPS } from 'enums';
+import routes from './routes';
 
 const RouterStore = types
   .model('RouterStore', {
+    accessGroup: ACCESSGROUPS.DEVELOPER,
     currentRoute: '/',
+    // routes,
   })
   .views(self => ({
     get route() {
       console.log('route:', self.currentRoute);
       return self.currentRoute;
+    },
+    get drawerLinks() {
+      const arr = Object.keys(routes);
+      return arr.map(route => routes[route]).filter(route => route.access <= self.accessGroup);
     },
   }))
   .actions(self => ({
@@ -30,7 +38,6 @@ const RouterStore = types
       window.removeEventListener('popstate', self.popStateListener);
     },
     popStateListener(event) {
-      console.log('popstate', event);
       self.changeRoute(event.state.url);
     },
     goTo(url) {

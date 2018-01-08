@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
-import { observer } from 'mobx-react';
+import { observer, Provider } from 'mobx-react';
 
 import Store from './Stores';
 import modelOf from './lib/mstPropTypeHelper';
@@ -12,10 +12,14 @@ export default class App extends Component {
     store: modelOf(Store).isRequired,
   };
   render() {
+    const { store } = this.props;
+
     return (
-      <ThemeProvider theme={this.props.store.theme}>
-        <DashBoard store={this.props.store} />
-      </ThemeProvider>
+      <Provider router={store.router} view={store.view} theme={store.theme}>
+        <ThemeProvider theme={store.theme}>
+          <DashBoard store={store} />
+        </ThemeProvider>
+      </Provider>
     );
   }
 }

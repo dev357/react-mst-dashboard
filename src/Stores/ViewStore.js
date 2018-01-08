@@ -3,13 +3,7 @@
 import { types } from 'mobx-state-tree';
 import { observe } from 'mobx';
 
-const BREAKPOINTS = Object.freeze({
-  XS: 0,
-  SM: 1,
-  MD: 2,
-  LG: 3,
-  XL: 4,
-});
+import { BREAKPOINTS } from 'enums';
 
 const ViewStore = types
   .model('ViewStore', {

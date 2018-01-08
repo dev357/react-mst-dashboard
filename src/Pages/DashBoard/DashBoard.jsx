@@ -4,9 +4,6 @@ import modelOf from 'lib/mstPropTypeHelper';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
 
-import LockIcon from 'mdi-react/LockOutlineIcon';
-import LockOpenIcon from 'mdi-react/LockOpenOutlineIcon';
-
 import AppBar from './Components/AppBar';
 import Footer from './Components/Footer';
 import Content from './Components/Content';
@@ -14,24 +11,7 @@ import Wrapper from './Components/Wrapper';
 import Drawer from './Components/Drawer';
 import TestPage from './Components/TestPage';
 import AppBarContent from './Components/AppBarContent';
-
-const DrawerHeader = styled.div`
-  display: flex;
-  padding-right: ${({ theme }) => theme.paddingSmall};
-  padding-left: ${({ theme }) => theme.paddingSmall};
-  align-items: center;
-  justify-content: space-between;
-  height: ${({ theme }) => `calc(${theme.appBarHeight} - 1px)`};
-  transition: all 0.5s;
-  border-bottom: ${({ theme }) => `1px solid ${theme.colorMedium}`};
-
-  svg {
-    transition: transform 0.2s;
-  }
-  svg:hover {
-    transform: scale(1.4, 1.4);
-  }
-`;
+import DrawerContent from './Components/DrawerContent';
 
 const Link = styled.a`
   color: ${({ theme }) => theme.textColorLight};
@@ -58,7 +38,7 @@ export default class DashBoard extends Component {
     return (
       <div>
         <Wrapper docked={docked}>
-          <AppBar gridarea="header">
+          <AppBar gridarea="header" test={this.props.store.theme}>
             <AppBarContent
               toggleNavBarOpen={this.toggleNavBarOpen}
               router={this.props.store.router}
@@ -79,18 +59,11 @@ export default class DashBoard extends Component {
           </Footer>
         </Wrapper>
         <Drawer toggleNavBarOpen={this.toggleNavBarOpen} open={open} docked={docked}>
-          <DrawerHeader>
-            <h3>{this.props.store.headingTest}</h3>
-            {open && docked ? (
-              <LockIcon onClick={this.toggleNavBarDocked} />
-            ) : (
-              <LockOpenIcon onClick={this.toggleNavBarDocked} />
-            )}
-          </DrawerHeader>
-          <br />
-          <button onClick={() => this.goTo('/foo')}>goto foo</button>
-          <button onClick={() => this.goTo('/bar')}>goto bar</button>
-          <button onClick={() => this.goTo('/')}>goto home</button>
+          <DrawerContent
+            view={this.props.store.view}
+            router={this.props.store.router}
+            headingTest={this.props.store.headingTest}
+          />
         </Drawer>
       </div>
     );
