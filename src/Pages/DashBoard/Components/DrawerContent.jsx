@@ -35,7 +35,7 @@ const Wrapper = styled.div`
 
 const DrawerContent = ({
   view: { toggleNavBarDocked, navBarState: { open, docked } },
-  router: { drawerLinks },
+  router: { allowedRoutes },
   headingTest,
 }) => (
   <Wrapper>
@@ -48,9 +48,9 @@ const DrawerContent = ({
       )}
     </DrawerHeader>
     <br />
-    {drawerLinks.map(link => (
-      <DrawerLink key={link.route} to={link.route}>
-        {link.name}
+    {allowedRoutes.map(route => (
+      <DrawerLink key={route.url} to={route.url}>
+        {route.name}
       </DrawerLink>
     ))}
   </Wrapper>

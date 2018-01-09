@@ -1,41 +1,35 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import ThemeStore from 'Stores/ThemeStore';
-import modelOf from 'lib/mstPropTypeHelper';
-import { observer, inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 
-const StyledAppBar = styled.header`
+import MenuIcon from 'mdi-react/MenuIcon';
+
+const StyledHeader = styled.header`
   grid-area: ${props => props.gridArea};
   background-color: ${props => props.theme.primary.hsl};
   color: ${props => props.theme.primary.contrastColor};
   fill: ${props => props.theme.primary.contrastColor};
+  display: flex;
+  padding-left: ${({ theme }) => theme.paddingSmall};
+  padding-right: ${({ theme }) => theme.paddingSmall};
+  align-items: center;
+  justify-content: space-between;
 `;
 
-const AppBar = ({ theme, children, gridArea }) => (
-  <StyledAppBar theme={theme} gridArea={gridArea}>
-    {children}
-  </StyledAppBar>
+const StyledMenuIcon = styled(MenuIcon)`
+  transition: transform 0.2s;
+
+  :hover {
+    transform: scale(1.4, 1.4);
+  }
+`;
+
+const AppBar = ({ theme, toggleNavBarOpen, router }) => (
+  <StyledHeader theme={theme}>
+    <StyledMenuIcon onClick={toggleNavBarOpen} />
+    <p>route: {router.route.url}</p>
+    <p>Log In</p>
+  </StyledHeader>
 );
 
-AppBar.propTypes = {
-  gridArea: PropTypes.string,
-  children: PropTypes.node,
-  theme: modelOf(ThemeStore).isRequired,
-};
-
-AppBar.defaultProps = {
-  children: null,
-  gridArea: 'header',
-};
-
-// export default inject('theme')(observer(AppBar));
-
-const Test = styled.header`
-  grid-area: ${props => props.gridArea};
-  background-color: ${props => props.theme.primary.hsl};
-  color: ${props => props.theme.primary.contrastColor};
-  fill: ${props => props.theme.primary.contrastColor};
-`;
-
-export default inject('theme')(observer(Test));
+export default inject('theme', 'router')(observer(AppBar));

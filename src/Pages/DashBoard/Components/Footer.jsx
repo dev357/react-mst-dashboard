@@ -1,8 +1,9 @@
+import React from 'react';
 import styled from 'styled-components';
 import { observer, inject } from 'mobx-react';
 
-const Footer = styled.footer`
-  grid-area: ${props => props.gridarea || 'footer'};
+const StyledFooter = styled.footer`
+  grid-area: ${props => props.gridarea};
   display: flex;
   align-items: flex-center;
   background-color: ${({ theme }) => theme.color.primary.hsl || 'black'};
@@ -11,4 +12,19 @@ const Footer = styled.footer`
   padding: ${({ theme }) => theme.paddingSmall};
 `;
 
-export default inject('theme')(observer(Footer));
+const Link = inject('theme')(styled.a`
+  color: ${({ theme }) => theme.color.primary.contrastColor};
+`);
+
+const Footer = ({ theme }) => (
+  <StyledFooter theme={theme}>
+    <p>
+      {'Made with ♥ by '}
+      <Link href="https://github.com/dev357" target="_blank">
+        dev357
+      </Link>
+    </p>
+  </StyledFooter>
+);
+
+export default inject('theme')(Footer);

@@ -2,22 +2,20 @@
 
 import { types } from 'mobx-state-tree';
 import { ACCESSGROUPS } from 'enums';
-import routes from './routes';
+import routes, { not_found } from './routes';
 
 const RouterStore = types
   .model('RouterStore', {
     accessGroup: ACCESSGROUPS.DEVELOPER,
-    currentRoute: '/',
+    currentPath: '/',
     // routes,
   })
   .views(self => ({
     get route() {
-      console.log('route:', self.currentRoute);
-      return self.currentRoute;
+      return routes.find(route => route.url === self.currentPath) || not_found;
     },
-    get drawerLinks() {
-      const arr = Object.keys(routes);
-      return arr.map(route => routes[route]).filter(route => route.access <= self.accessGroup);
+    get allowedRoutes() {
+      return routes.filter(route => route.access <= self.accessGroup);
     },
   }))
   .actions(self => ({
@@ -41,13 +39,13 @@ const RouterStore = types
       self.changeRoute(event.state.url);
     },
     goTo(url) {
-      if (self.currentRoute !== url) {
+      if (self.currentPath !== url) {
         window.history.pushState({ url }, `router: ${url}`, url);
         self.changeRoute(url);
       }
     },
     changeRoute(url) {
-      self.currentRoute = url;
+      self.currentPath = url;
     },
   }));
 

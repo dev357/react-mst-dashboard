@@ -11,12 +11,7 @@ import Footer from './Components/Footer';
 import Content from './Components/Content';
 import Wrapper from './Components/Wrapper';
 import Drawer from './Components/Drawer';
-import AppBarContent from './Components/AppBarContent';
 import DrawerContent from './Components/DrawerContent';
-
-const Link = inject('theme')(styled.a`
-  color: ${({ theme }) => theme.color.primary.contrastColor};
-`);
 
 @observer
 export default class DashBoard extends Component {
@@ -35,37 +30,20 @@ export default class DashBoard extends Component {
   };
 
   render() {
-    const { navBarState: { open, docked } } = this.props.store.view;
+    const { router, view, headingTest } = this.props.store;
+    const { navBarState: { open, docked } } = view;
+    const { route } = router;
     return (
       <div>
         <Wrapper docked={docked}>
-          <AppBar gridarea="header" test={this.props.store.theme}>
-            <AppBarContent
-              toggleNavBarOpen={this.toggleNavBarOpen}
-              router={this.props.store.router}
-            />
-            <p>tere</p>
-          </AppBar>
+          <AppBar gridarea="header" toggleNavBarOpen={this.toggleNavBarOpen} />
 
-          <Content gridarea="content">
-            <Colors />
-          </Content>
+          <Content gridarea="content">{route.component}</Content>
 
-          <Footer gridarea="footer">
-            <p>
-              {'Made with ♥ by '}
-              <Link href="https://github.com/dev357" target="_blank">
-                dev357
-              </Link>
-            </p>
-          </Footer>
+          <Footer gridarea="footer" />
         </Wrapper>
         <Drawer toggleNavBarOpen={this.toggleNavBarOpen} open={open} docked={docked}>
-          <DrawerContent
-            view={this.props.store.view}
-            router={this.props.store.router}
-            headingTest={this.props.store.headingTest}
-          />
+          <DrawerContent view={view} router={router} headingTest={headingTest} />
         </Drawer>
       </div>
     );
