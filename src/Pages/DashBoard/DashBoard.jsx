@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
 import Store from 'Stores';
 import modelOf from 'lib/mstPropTypeHelper';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import styled from 'styled-components';
+
+import Colors from 'Pages/Colors/Colors';
 
 import AppBar from './Components/AppBar';
 import Footer from './Components/Footer';
 import Content from './Components/Content';
 import Wrapper from './Components/Wrapper';
 import Drawer from './Components/Drawer';
-import TestPage from './Components/TestPage';
 import AppBarContent from './Components/AppBarContent';
 import DrawerContent from './Components/DrawerContent';
 
-const Link = styled.a`
-  color: ${({ theme }) => theme.textColorLight};
-`;
+const Link = inject('theme')(styled.a`
+  color: ${({ theme }) => theme.color.primary.contrastColor};
+`);
 
 @observer
 export default class DashBoard extends Component {
@@ -43,10 +44,11 @@ export default class DashBoard extends Component {
               toggleNavBarOpen={this.toggleNavBarOpen}
               router={this.props.store.router}
             />
+            <p>tere</p>
           </AppBar>
 
           <Content gridarea="content">
-            <TestPage />
+            <Colors />
           </Content>
 
           <Footer gridarea="footer">

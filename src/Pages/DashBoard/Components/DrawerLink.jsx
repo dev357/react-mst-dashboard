@@ -6,9 +6,8 @@ import { inject, observer } from 'mobx-react';
 import RouterStore from 'Stores/RouterStore';
 import modelOf from 'lib/mstPropTypeHelper';
 
-const StyledLink = styled.a`
-  background-color: ${({ theme }) => theme.colorLight};
-  color: ${({ theme }) => theme.colorDark};
+const StyledLink = inject('theme')(styled.a`
+  color: ${({ theme }) => theme.color.black.hsl};
   padding-top: ${({ theme }) => theme.paddingSmall};
   padding-bottom: ${({ theme }) => theme.paddingSmall};
   padding-right: ${({ theme }) => theme.paddingSmall};
@@ -16,13 +15,13 @@ const StyledLink = styled.a`
   margin-bottom: 0.2rem;
 
   :hover {
-    background-color: ${({ theme }) => theme.colorMedium};
+    background-color: ${({ theme }) => theme.color.primary.getColor(7).hsl};
   }
-`;
+`);
 
-const ActiveStyledLink = StyledLink.extend`
-  background-color: ${({ theme }) => theme.colorMedium};
-`;
+const ActiveStyledLink = inject('theme')(StyledLink.extend`
+  background-color: ${({ theme }) => theme.color.primary.getColor(7).hsl};
+`);
 
 const DrawerLink = ({ to, children, router: { route, goTo } }) => {
   const active = to === route;

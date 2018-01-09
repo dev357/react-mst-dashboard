@@ -1,5 +1,5 @@
 import React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import styled from 'styled-components';
 
 import LockIcon from 'mdi-react/LockOutlineIcon';
@@ -7,7 +7,7 @@ import LockOpenIcon from 'mdi-react/LockOpenOutlineIcon';
 
 import DrawerLink from './DrawerLink';
 
-const DrawerHeader = styled.div`
+const DrawerHeader = inject('theme')(styled.div`
   display: flex;
   padding-right: ${({ theme }) => theme.paddingSmall};
   padding-left: ${({ theme }) => theme.paddingSmall};
@@ -15,7 +15,7 @@ const DrawerHeader = styled.div`
   justify-content: space-between;
   height: ${({ theme }) => `calc(${theme.appBarHeight} - 1px)`};
   transition: all 0.5s;
-  border-bottom: ${({ theme }) => `1px solid ${theme.colorMedium}`};
+  border-bottom: ${({ theme }) => `1px solid ${theme.color.primary.getColor(15).hsl}`};
 
   svg {
     transition: transform 0.2s;
@@ -23,7 +23,7 @@ const DrawerHeader = styled.div`
   svg:hover {
     transform: scale(1.4, 1.4);
   }
-`;
+`);
 
 const Wrapper = styled.div`
   display: flex;

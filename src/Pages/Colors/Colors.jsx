@@ -16,11 +16,11 @@ const ColoredDiv = styled.div`
   background-color: ${({ color }) => color};
 `;
 
-const Wrapper = styled.div`
+const Wrapper = inject('theme')(styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-`;
+`);
 
 const GroupWrapper = styled.div`
   display: flex;
@@ -33,33 +33,37 @@ const ColorName = styled.p`
   padding-left: 1rem;
 `;
 
-const TestPage = ({
+const Colors = ({
   theme: {
-    cPrimary, getColor, colors, primary, secondary,
-  },
+    colors, primary, secondary, setPrimary,
+  }, theme,
 }) => {
-  const cValues = [5, 10, 20, 30, 40, 50, 60, 70, 80, 90];
+  const lValues = [5, 10, 20, 30, 40, 50, 60, 70, 80, 90];
 
   return (
     <Wrapper>
       <GroupWrapper>
-        <ColoredDiv color={colors.get(primary).hex} />
-        <ColoredDiv color={colors.get(secondary).hex} />
+        <ColoredDiv color={primary.hsl} />
+        <ColoredDiv color={secondary.hsl} />
       </GroupWrapper>
 
       <GroupWrapper>
-        {colors.keys().map(key => <ColoredDiv color={colors.get(key).hsl} />)}
+        {colors
+          .keys()
+          .map(key => (
+            <ColoredDiv key={key} color={colors.get(key).hsl} onClick={() => setPrimary(key)} />
+          ))}
       </GroupWrapper>
 
       {colors.keys().map((key) => {
         const mainColor = colors.get(key);
         return (
-          <GroupWrapper>
-            {cValues.map((c) => {
-              const color = mainColor.lighten(c);
+          <GroupWrapper key={key}>
+            {lValues.map((l) => {
+              const color = mainColor.getColor(l);
               return (
-                <ColoredDiv color={color.hsl}>
-                  <LightnessText color={color.contrastColor}>{c}</LightnessText>
+                <ColoredDiv key={l} color={color.hsl}>
+                  <LightnessText color={color.contrastColor}>{l}</LightnessText>
                 </ColoredDiv>
               );
             })}
@@ -71,4 +75,4 @@ const TestPage = ({
   );
 };
 
-export default inject('theme')(observer(TestPage));
+export default inject('theme')(observer(Colors));

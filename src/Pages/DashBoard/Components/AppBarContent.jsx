@@ -1,16 +1,16 @@
 import React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import styled from 'styled-components';
 
 import MenuIcon from 'mdi-react/MenuIcon';
 
-const Wrapper = styled.div`
+const Wrapper = inject('theme')(styled.div`
   display: flex;
   padding-left: ${({ theme }) => theme.paddingSmall};
   padding-right: ${({ theme }) => theme.paddingSmall};
   align-items: center;
   justify-content: space-between;
-`;
+`);
 
 const StyledMenuIcon = styled(MenuIcon)`
   transition: transform 0.2s;
