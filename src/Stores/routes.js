@@ -2,6 +2,14 @@ import React from 'react';
 import Loadable from 'react-loadable';
 import { ACCESSGROUPS } from 'enums';
 
+const LoadableColors = Loadable({
+  loader: () => import('Pages/Colors/Colors'),
+  loading() {
+    console.log('loading!');
+    return <div>Loading...</div>;
+  },
+});
+
 export default [
   {
     url: '/',
@@ -13,12 +21,7 @@ export default [
     url: '/colors',
     name: 'Colors',
     access: ACCESSGROUPS.DEVELOPER,
-    component: Loadable({
-      loader: () => import('Pages/Color/Color'),
-      loading() {
-        return <div>Loading...</div>;
-      },
-    }),
+    component: <LoadableColors />,
   },
   {
     url: '/public',

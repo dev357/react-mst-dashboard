@@ -4,8 +4,6 @@ import modelOf from 'lib/mstPropTypeHelper';
 import { observer, inject } from 'mobx-react';
 import styled from 'styled-components';
 
-import Colors from 'Pages/Colors/Colors';
-
 import AppBar from './Components/AppBar';
 import Footer from './Components/Footer';
 import Content from './Components/Content';
