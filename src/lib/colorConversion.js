@@ -57,3 +57,16 @@ export function hslToHex(h, s, l) {
   };
   return `#${toHex(rgb[0])}${toHex(rgb[1])}${toHex(rgb[2])}`;
 }
+
+export function luminance(rgb) {
+  const arr = rgb.map((c) => {
+    c /= 255;
+    if (c <= 0.03928) {
+      c /= 12.92;
+    } else {
+      c = Math.pow((c + 0.055) / 1.055, 2.4);
+    }
+    return c;
+  });
+  return 0.2126 * arr[0] + 0.7152 * arr[1] + 0.0722 * arr[2];
+}

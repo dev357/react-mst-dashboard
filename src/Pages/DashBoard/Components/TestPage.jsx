@@ -2,12 +2,15 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import styled from 'styled-components';
 
-const LargeText = styled.p`
-  font-size: 5em;
-  color: ${({ theme }) => theme.colorDark};
+const LightnessText = styled.p`
+  font-size: 1em;
+  color: ${({ color }) => color};
 `;
 
 const ColoredDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 3rem;
   height: 3rem;
   background-color: ${({ color }) => color};
@@ -22,6 +25,12 @@ const Wrapper = styled.div`
 const GroupWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
+  padding-bottom: 1rem;
+`;
+
+const ColorName = styled.p`
+  padding-left: 1rem;
 `;
 
 const TestPage = ({
@@ -29,8 +38,7 @@ const TestPage = ({
     cPrimary, getColor, colors, primary, secondary,
   },
 }) => {
-  const cValues = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
-  console.log(colors.get('green').hex);
+  const cValues = [5, 10, 20, 30, 40, 50, 60, 70, 80, 90];
 
   return (
     <Wrapper>
@@ -39,17 +47,26 @@ const TestPage = ({
         <ColoredDiv color={colors.get(secondary).hex} />
       </GroupWrapper>
 
-      <br />
-
-      <GroupWrapper>{cValues.map(c => <ColoredDiv key={c} color={cPrimary[c]} />)}</GroupWrapper>
-
-      <br />
-
       <GroupWrapper>
-        <GroupWrapper>
-          {cValues.map(c => <ColoredDiv key={c} color={getColor(200, 50, 50, 1, c)} />)}
-        </GroupWrapper>
+        {colors.keys().map(key => <ColoredDiv color={colors.get(key).hsl} />)}
       </GroupWrapper>
+
+      {colors.keys().map((key) => {
+        const mainColor = colors.get(key);
+        return (
+          <GroupWrapper>
+            {cValues.map((c) => {
+              const color = mainColor.lighten(c);
+              return (
+                <ColoredDiv color={color.hsl}>
+                  <LightnessText color={color.contrastColor}>{c}</LightnessText>
+                </ColoredDiv>
+              );
+            })}
+            <ColorName>{colors.get(key).name}</ColorName>
+          </GroupWrapper>
+        );
+      })}
     </Wrapper>
   );
 };
